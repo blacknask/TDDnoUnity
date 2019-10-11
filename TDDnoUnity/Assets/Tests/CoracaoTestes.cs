@@ -69,9 +69,14 @@ namespace Tests
                 img.fillAmount = 1.0f;
                 cor.Decarregar(1);
 
-                Assert.AreEqual(0.75f, img.fillAmount);
+                Assert.AreEqual(0.0f, img.fillAmount);
              }
              
+            [Test]
+            public void localExecaoMumeroNegativo()
+            {
+                Assert.Throws<ArgumentException>(() => cor.Decarregar (-1));
+            }
         }
         
 
@@ -94,6 +99,8 @@ namespace Tests
 
             public void Decarregar(int pedacos)
             {
+                if (pedacos < 0)
+                    throw new ArgumentException("O argumento deve ser um valor positivo","pedacos");
                 this.image.fillAmount -= pedacos * PreenchimentoPedaco;
             }
         }
