@@ -8,30 +8,74 @@ using UnityEngine.UI;
 
 namespace Tests
 {
-   public class CoracaoTestes
+    public class CoracaoTestes
     {
-        [Test]
-        public void ImagemPreenchimento0Recarregamento0()
+        public class TestesMetodoRecarga
         {
+            private Image img;
+            private Coracao cor;
 
-            Image image = new GameObject().AddComponent<Image>();
-            image.fillAmount = 0;
-            Coracao coracao = new Coracao(image);
-            coracao.Recarregar(0);
+            [SetUp]
+            public void Config()
+            {
+                img = new GameObject().AddComponent<Image>();
+                cor = new Coracao(img);
+            }
 
-            Assert.AreEqual(0, image.fillAmount);
+
+            [Test]
+            public void ImagemPreenchimento0Recarregamento0()
+            {
+                img.fillAmount = 0;
+                cor.Recarregar(0);
+
+                Assert.AreEqual(0, img.fillAmount);
+            }
+            [Test]
+            public void ImagenPreenchimento025Recarregamento1()
+            {
+                img.fillAmount = 0.25f;
+                cor.Recarregar(1);
+
+                Assert.AreEqual(0.5f, img.fillAmount);
+            }
+            [Test]
+            public void ImagenPreenchimento1Recarregamento1()
+            {
+                img.fillAmount = 1f;
+                cor.Recarregar(1);
+
+                Assert.AreEqual(1f, img.fillAmount);
+            }
+
         }
-        [Test]
-        public void ImagenPreenchimento0Recarregamento()
+
+
+        public class TestesMetodoDescarga
         {
-            Image image = new GameObject().AddComponent<Image>();
-            image.fillAmount = 0;
-            Coracao coracao = new Coracao(image);
-            coracao.Recarregar(1);
+            private Image img;
+            private Coracao cor;
 
-            Assert.AreEqual(0.25f, image.fillAmount);
+            [SetUp]
+            public void Config()
+            {
+                img = new GameObject().AddComponent<Image>();
+                cor = new Coracao(img);
+            }
+
+             [Test]
+             public void ImagemPreenchimento1Descarregamento1()
+             {
+                img.fillAmount = 1.0f;
+                cor.Decarregar(1);
+
+                Assert.AreEqual(0.75f, img.fillAmount);
+             }
+             
         }
-        private class Coracao
+        
+
+        public class Coracao
         {
             private const float PreenchimentoPedaco = 0.25f;
             private readonly Image image;
@@ -41,9 +85,16 @@ namespace Tests
                 this.image = image;
             }
 
-            internal void Recarregar(int pedacos)
+
+            public void Recarregar(int pedacos)
             {
-                this.image.fillAmount = pedacos * 0.25f;
+                this.image.fillAmount += pedacos * 0.25f;
+            }
+
+
+            public void Decarregar(int pedacos)
+            {
+                this.image.fillAmount -= pedacos * PreenchimentoPedaco;
             }
         }
     }
